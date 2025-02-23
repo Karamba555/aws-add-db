@@ -32,7 +32,7 @@ jobs:
             aws configure set aws_secret_access_key << parameters.aws-secret-access-key >>
             aws configure set region << parameters.aws-region >>
       - terraform/install:
-          terraform_version: "1.5.7" # Specify your Terraform version
+          terraform_version: "1.0.2" # Specify your Terraform version
       - run:
           name: Terraform Init
           command: terraform init
