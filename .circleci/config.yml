@@ -8,7 +8,6 @@ jobs:
   plan:
     executor:
       name: aws-cli/default
-      tag: "latest"
     parameters:
       aws-access-key-id:
         type: string
@@ -18,7 +17,7 @@ jobs:
         default: ""
       aws-region:
         type: string
-        default: "us-east-1"  # Change to your desired AWS region
+        default: "us-east-2"  # Change to your desired AWS region
       terraform_workspace:
         type: string
         default: "default"  # Change to your Terraform workspace
@@ -49,7 +48,6 @@ jobs:
   apply:
     executor:
       name: aws-cli/default
-      tag: "latest"
     parameters:
       aws-access-key-id:
         type: string
@@ -59,7 +57,7 @@ jobs:
         default: ""
       aws-region:
         type: string
-        default: "us-east-1" # Change to your desired AWS region
+        default: "us-east-2" # Change to your desired AWS region
       terraform_workspace:
         type: string
         default: "default"  # Change to your Terraform workspace
@@ -73,7 +71,7 @@ jobs:
             aws configure set aws_secret_access_key << parameters.aws-secret-access-key >>
             aws configure set region << parameters.aws-region >>
       - terraform/install:
-          terraform_version: "1.5.7" # Specify your Terraform version
+          terraform_version: "1.0.2" # Specify your Terraform version
       - run:
           name: Terraform Init
           command: terraform init
@@ -91,13 +89,16 @@ workflows:
           context: aws-credentials # Optional: use a CircleCI context for AWS credentials
           filters:
             branches:
-              ignore: main  # Only run on feature branches
+              ignore:
+                - main  # Only run on feature branches
       - apply:
           context: aws-credentials # Optional: use a CircleCI context for AWS credentials
           requires:
             - plan
           filters:
             branches:
-              only: main  # Only run on the main branch
-          aws-access-key-id: "${AWS_ACCESS_KEY_ID}" #  Use CircleCI environment variables for security.  Do not hardcode!
-          aws-secret-access-key: "${AWS_SECRET_ACCESS_KEY}" # Use CircleCI environment variables for security.  Do not hardcode!
+              only:
+                - main  # Only run on the main branch
+          aws-access-key-id: $AWS_ACCESS_KEY_ID # Use CircleCI environment variables for security. Do not hardcode!
+          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY # Use CircleCI environment variables for security. Do not hardcode!
+          aws-region: $AWS_REGION # Use CircleCI environment variable
