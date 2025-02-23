@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  terraform: circleci/terraform@4.1
+  terraform: circleci/terraform@3.6.0
   aws-cli: circleci/aws-cli@3.1
 
 jobs:
